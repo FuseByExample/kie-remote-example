@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+~ Copyright (C) Red Hat, Inc.
+~ http://www.redhat.com
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~    http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
+<wsdl:definitions name="Greeter"
+                  targetNamespace="http://examples.fusebyexample.org/greeter"
+                  xmlns:tns="http://examples.fusebyexample.org/greeter"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  
+  <wsdl:types>
+    
+    <xsd:schema targetNamespace="http://examples.fusebyexample.org/greeter" 
+                xmlns:tns="http://examples.fusebyexample.org/greeter" 
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+                elementFormDefault="qualified">
+      
+      <xsd:element name="requestGreeting" type="tns:RequestGreetingRequest"/>
+      <xsd:element name="requestGreetingResponse" type="tns:AsyncResponse"/>
+
+      <xsd:complexType name="AsyncRequest" abstract="true">
+        <xsd:sequence>
+          <xsd:element name="callbackId" type="xsd:string"/>
+          <xsd:element name="callbackUri" type="xsd:anyURI"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:complexType name="AsyncResponse">
+        <xsd:sequence>
+          <xsd:element name="requestId" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:complexType name="RequestGreetingRequest">
+        <xsd:complexContent>
+          <xsd:extension base="tns:AsyncRequest">
+            <xsd:sequence>
+              <xsd:element name="name" type="xsd:string"/>
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+    </xsd:schema>
+
+  </wsdl:types>
+
+  <wsdl:message name="requestGreeting">
+    <wsdl:part element="tns:requestGreeting" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="requestGreetingResponse">
+    <wsdl:part element="tns:requestGreetingResponse" name="parameters"/>
+  </wsdl:message>
+
+  <wsdl:portType name="Greeter"> 
+    <wsdl:operation name="requestGreeting">
+      <wsdl:input message="tns:requestGreeting" name="requestGreeting"/>
+      <wsdl:output message="tns:requestGreetingResponse" name="requestGreetingResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="GreeterSoapBinding" type="tns:Greeter">
+    
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    
+    <wsdl:operation name="requestGreeting">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="requestGreeting">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="requestGreetingResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    
+  </wsdl:binding>
+
+  <wsdl:service name="GreeterService">
+    <wsdl:port binding="tns:GreeterSoapBinding" name="GreeterPort">
+      <soap:address location="http://localhost:9000/greeter"/>
+    </wsdl:port>
+  </wsdl:service>
+  
+</wsdl:definitions>

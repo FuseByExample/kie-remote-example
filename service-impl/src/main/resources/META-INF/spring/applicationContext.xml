@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright (C) Red Hat, Inc.
+  ~ http://www.redhat.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+  <bean id="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
+  <bean id="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>
+
+  <jaxws:endpoint id="greeterService"
+                  address="http://localhost:8081/greeter"
+                  implementor="#greeterJbpmBridge"
+                  wsdlLocation="org/fusebyexample/examples/greeter/Greeter.wsdl">
+      <jaxws:properties>
+        <entry key="schema-validation-enabled" value="true"/>
+      </jaxws:properties>
+      <jaxws:inInterceptors>
+          <ref bean="loggingInInterceptor"/>
+      </jaxws:inInterceptors>
+      <jaxws:outInterceptors>
+          <ref bean="loggingOutInterceptor"/>
+      </jaxws:outInterceptors>
+  </jaxws:endpoint>
+
+  <bean id="greeterJbpmBridge" class="org.fusebyexample.examples.greeter.impl.GreeterJbpmBridge">
+    <constructor-arg ref="remoteRuntimeEngine"/>
+    <constructor-arg value="GreeterProcess"/>
+  </bean>
+  
+  <bean id="remoteRuntimeFactory" class="org.kie.services.client.api.RemoteRestRuntimeFactory">
+    <constructor-arg value="org.fusebyexample.examples:kie-remote-example-jbpm:1.0"/>
+    <constructor-arg>
+      <bean class="java.net.URL">
+        <constructor-arg value="http://localhost:8080/business-central"/>
+      </bean>
+    </constructor-arg>
+    <constructor-arg value="admin"/>
+    <constructor-arg value="admin1!!"/>
+  </bean>
+
+  <bean id="remoteRuntimeEngine" factory-bean="remoteRuntimeFactory" factory-method="newRuntimeEngine"/>
+
+</beans>
