@@ -57,4 +57,4 @@ Build & Deploy the project
 WS Test
 -------------------
 
-There is a SoapUI test suite in <Project Root>/service-impl/src/test/soapui. It contains a test case for sending in a request as well as a mock service for receiving the async callback.
+There is a SoapUI test suite in <Project Root>/service-impl/src/test/soapui. It contains a test case for sending in a request as well as a mock service for receiving the async callback. Once a process is kicked off, you will need to log into the BPMS business central as the user you created with "analyst" role and complete the greeting task. Once completed, the BPM process will call back to the mock service hosted by SoapUI.
