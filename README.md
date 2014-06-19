@@ -1,5 +1,7 @@
-CXF LB/Proxy Example
+KIE Remote Example
 ==================
+
+This is an example of remotely invoking a jBPM process running in a separate BPMS server using the REST APIs.
 
 Requirements
 ------------
