@@ -15,22 +15,17 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<features name="lbproxy-example"
+<features name="kie-remote-example"
           xmlns="http://karaf.apache.org/xmlns/features/v1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.0.0 http://karaf.apache.org/xmlns/features/v1.0.0">
           
   <repository>mvn:org.apache.camel.karaf/apache-camel/${camel.version}/xml/features</repository>
   
-  <feature name='lbproxy-example' version='${project.version}'>
-    
-    <feature version="${camel.version}">camel-core</feature>
-    <feature version="${camel.version}">camel-spring</feature>
-    <feature version="${camel.version}">camel-cxf</feature>
+  <feature name='kie-remote-example' version='${project.version}'>
     
     <bundle>mvn:${project.groupId}/service-api/${project.version}</bundle>
     <bundle>mvn:${project.groupId}/service-impl/${project.version}</bundle>
-    <bundle>mvn:${project.groupId}/camel-routes/${project.version}</bundle>
     
   </feature>
   

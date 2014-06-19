@@ -11,7 +11,7 @@ Requirements
 Building Example
 ----------------
 
-From top level of example project directory, run
+From the project root, run
 
     mvn clean install
 
@@ -32,7 +32,29 @@ log (tail) with the following command
 
     log:tail
 
+Running in JBoss BPM Suite
+---------------------
+
+Create an application user and give them an "analyst" role
+
+    <JBoss BPMS Home>/bin/add-user.sh
+
+Copy the work item handler and service callback api jars into the business central lib folder
+
+    cp <Project Root>/jbpm-wih/target/jbpm-wih-*.jar <JBoss BPMS Home>/standalone/deployments/business-central.war/WEB-INF/lib/
+    cp <Project Root>/servicecb-api/target/servicecb-api-*.jar <JBoss BPMS Home>/standalone/deployments/business-central.war/WEB-INF/lib/
+
+Start JBoss BPMS
+
+    <JBoss BPMS Home>/bin/standalone.sh -c standalone-full.xml
+
+Browse to the JBoss BPMS console (http://localhost:8080/business-central)
+
+Import the Git repository (https://github.com/FuseByExample/kie-remote-example-jbpm)
+
+Build & Deploy the project
+
 WS Test
 -------------------
 
-Use your favorite WS testing tool (ie. SoapUI) and point it to http://localhost:9090/greetingService?wsdl. Send in multiple requests and you should see it load balance/proxy to the different implementations.
+There is a SoapUI test suite in <Project Root>/service-impl/src/test/soapui. It contains a test case for sending in a request as well as a mock service for receiving the async callback.
